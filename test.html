@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>강의 검색</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    .search-box {
+      margin-bottom: 20px;
+    }
+    .lecture-list {
+      border-top: 1px solid #ccc;
+    }
+    .lecture-item {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <h1>강의 검색</h1>
+
+  <div class="search-box">
+    <label>
+      강의명:
+      <input type="text" id="title-search">
+    </label>
+    <label>
+      교수명:
+      <input type="text" id="professor-search">
+    </label>
+    <label>
+      강의개설학과:
+      <select id="department-search">
+        <option value="">전체</option>
+        <option value="컴퓨터공학과">컴퓨터공학과</option>
+        <option value="경영학과">경영학과</option>
+        <option value="심리학과">심리학과</option>
+      </select>
+    </label>
+    <button onclick="searchLectures()">검색</button>
+  </div>
+
+  <div class="lecture-list" id="lecture-list">
+    <!-- 검색 결과가 여기에 표시됨 -->
+  </div>
+
+  <script>
+    const lectures = [
+      { title: "Python 기초", professor: "홍길동", credit: 3, department: "컴퓨터공학과" },
+      { title: "마케팅 원론", professor: "이영희", credit: 2, department: "경영학과" },
+      { title: "심리학개론", professor: "최지훈", credit: 3, department: "심리학과" },
+    ];
+
+    function searchLectures() {
+      const title = document.getElementById("title-search").value.toLowerCase();
+      const professor = document.getElementById("professor-search").value.toLowerCase();
+      const department = document.getElementById("department-search").value;
+
+      const filtered = lectures.filter(lec =>
+        lec.title.toLowerCase().includes(title) &&
+        lec.professor.toLowerCase().includes(professor) &&
+        (department === "" || lec.department === department)
+      );
+
+      const list = document.getElementById("lecture-list");
+      list.innerHTML = "";
+
+      if (filtered.length === 0) {
+        list.innerHTML = "<p>검색 결과가 없습니다.</p>";
+        return;
+      }
+
+      filtered.forEach(lec => {
+        const item = document.createElement("div");
+        item.className = "lecture-item";
+        item.innerHTML = `<strong>${lec.title}</strong> | 교수: ${lec.professor} | 학점: ${lec.credit} | 개설학과: ${lec.department}`;
+        list.appendChild(item);
+      });
+    }
+  </script>
+</body>
+</html>
